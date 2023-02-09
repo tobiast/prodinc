@@ -8,8 +8,6 @@ app.use(express.static(__dirname + '/public'));
 
 app.get("/", (req, res) => res.type('html').send(html));
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-
 
 // bruk pug som template-motor (Skrive HTML)
 app.set('view engine', 'pug');
@@ -28,6 +26,10 @@ app.use('/ping', function (req, res) {
 app.get('*', function(req, res) {
     res.render("error", { title: 'Siden finnes ikke!', message: 'Du har forsøkt å gå til en side som ikke finnes.'})
 });
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+
 
 const html = `
 <!DOCTYPE html>
