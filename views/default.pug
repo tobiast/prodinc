@@ -1,0 +1,27 @@
+html
+    head
+        script(type='text/javascript').
+            function search(){
+                let searchURL = "items?s="+document.getElementById("searchString").value
+
+                searchURL = searchURL + "&sortOrder="+document.getElementById("order").value
+                searchURL = searchURL +"&limit="+document.getElementById("limit").value
+                window.location.href=searchURL
+            }
+            function preFillSearch(){
+                const urlParams = new URLSearchParams(window.location.search);
+                document.getElementById("searchString").value = urlParams.get('s');
+            }
+
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        meta(http-equiv='X-UA-Compatible' content='ie=edge')
+        link(rel='stylesheet' type="text/css" href='/css/stylesheet.css')
+        link(rel='preconnect' href='https://fonts.gstatic.com')
+        link(href='https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap' rel='stylesheet')
+        title= title
+    body(onload='preFillSearch()')
+        <div class="header" width="90%">
+        <img src="/logo.png" height="400em">
+        </div>
+        block content

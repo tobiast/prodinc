@@ -1,0 +1,47 @@
+extends default.pug
+
+block content 
+  <div class="searchbox">Filter:
+    <input id="searchString" type="text">Sortering: 
+    <select id="order">
+      <option value="1">price asc</option>
+      <option value="2">price des</option>
+      <option value="3">Name asc</option>
+      <option value="4">Name des</option>
+      <option value="5">discount asc</option>
+      <option value="6">discount des</option>
+      <option value="7">Brand asc</option>
+      <option value="8">Brand des</option>
+    </select> Products pr page: 
+    <select id="limit">
+      <option value="100" selected>100</option>
+      <option value="50">50</option>
+      <option value="10">10</option>
+    </select>
+    <button onclick="search()">oppdater</button>
+  </div>
+  <div class="searchbox">
+    h2= searchString
+  </div>
+    table(width='95%', cellspacing='0', cellpadding='0', border='0', bgcolor='#F2F2F2')
+      thead
+        tr
+          th Name
+          th Brand
+          th price
+          th discount
+          th details
+      tbody
+        each product in products
+          tr
+            td 
+              <div>
+                 <img class="prodImages" src="#{product.images[0]}" width="100px"> 
+                 <span class="caption"> #{product.title} </span>
+              </div>
+            td #{product.brand}
+            td #{product.price},-
+            td #{Math.round(product.discountPercentage)} %
+            td <a href=items/#{product.id}> details</a>
+                
+                

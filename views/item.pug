@@ -1,0 +1,21 @@
+extends default.pug
+
+block content 
+    h3 <a href="/items"> products</a>  > <a href=""> #{product.title} </a>
+    h1= product.title
+    <p>
+    -for (var i = 0; i < Math.round(product.rating); ++i) {
+        <img src="/star.png" width="20em">
+    -}
+    #{product.rating.toString()} 
+    </p>
+
+    <p class="details">pris: #{product.price} ,- </p>
+    <p class="details">Antall på lager: #{product.stock} </p>
+    <p class="details">Rabatt: #{product.discountPercentage} %</p>
+
+    <h3> Beskrivelse: </h3>
+    p= product.description
+    
+    each img in product.images
+        <img src=#{img} alt="product photo">
