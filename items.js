@@ -6,48 +6,44 @@ var router = express.Router();
 router.get('/', async function(req, res, next){
 
    try{
+         console.log("geting Items root")
+         let limit = req.query.limit;
+         let s = req.query.s;
+         let order = req.query.sortOrder;
 
-        console.log("geting Items root")
-        let limit = req.query.limit;
-        let s = req.query.s;
-        let order = req.query.sortOrder;
+         // hent alle produkter
+         let products = await getProducts(0, 100)
+         let searchString; 
 
-        let products = await getProducts(0, 100)
-        let searchString; 
-
-        if (s){
+         // Hvis søkeparameter er med - filtrer ut de produktene som har søketeksten i seg
+         if (s){
             products = products.filter(product => containsSearchString(product, s))
             searchString = 'Viser resultater for: ' + s;
         }
 
-
+        // Hvis sortorder sendes som parameter. Sorter slik 
         if (order){
            products = sort(products, order);
         }
 
-
+        // hvis antallbegresninger er med. Ta bort de overflødige
         if (limit){
             createPagination(limit, products.length)
             products = products.slice(0,limit)
         }
-      
 
+        // Vis siden med liste over items
         res.render("items", { title: 'Items!',  products: products, searchString: searchString})
    } catch(err){
        next(err);
    }
 });
 
-
 function createPagination(numbersToShow, totalNumber){
 
     let numberOfPages = Math.round(totalNumber / numbersToShow)
-
     let pageLinks = ""; 
-
-    console.log("Showwing pages: " + numberOfPages);
-
-     
+    console.log("Showwing pages: " + numberOfPages);     
 }
 
 function sort(products, order){
