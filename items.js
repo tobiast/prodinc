@@ -6,27 +6,49 @@ var router = express.Router();
 router.get('/', async function(req, res, next){
 
    try{
-      let limit = req.query.limit;
-      let s = req.query.s;
-      let order = req.query.sortOrder;
 
-      let products = await getProducts(0, 100)
-      let searchString; 
+        console.log("geting Items root")
+        let limit = req.query.limit;
+        let s = req.query.s;
+        let order = req.query.sortOrder;
 
-      if (s){
-         products = products.filter(product => containsSearchString(product, s))
-         searchString = 'Viser resultater for: ' + s;
-      }
+        let products = await getProducts(0, 100)
+        let searchString; 
 
-      // products = sort(products, order);
+        if (s){
+            products = products.filter(product => containsSearchString(product, s))
+            searchString = 'Viser resultater for: ' + s;
+        }
 
-      products = products.slice(0,limit)
 
-      res.render("items", { title: 'Items!',  products: products, searchString: searchString})
+        if (order){
+           products = sort(products, order);
+        }
+
+
+        if (limit){
+            createPagination(limit, products.length)
+            products = products.slice(0,limit)
+        }
+      
+
+        res.render("items", { title: 'Items!',  products: products, searchString: searchString})
    } catch(err){
        next(err);
    }
 });
+
+
+function createPagination(numbersToShow, totalNumber){
+
+    let numberOfPages = Math.round(totalNumber / numbersToShow)
+
+    let pageLinks = ""; 
+
+    console.log("Showwing pages: " + numberOfPages);
+
+     
+}
 
 function sort(products, order){
 
@@ -64,8 +86,14 @@ function sort(products, order){
 
 // funksjon som håndterer detaljvisning av et produkt på ID
 router.get('/:id', async function(req, res){
-   let products = await getProducts(0, 100)
-   res.render("item", { title: 'Item!',  product: products[req.params.id-1]})
+
+   // isNaN (is not a number) returnerer true hvis parameteret _ikke_ inneholder et tall. 
+   if (!isNaN(req.params.id)){
+      let products = await getProducts(0, 100)
+      res.render("item", { title: 'Item!',  product: products[req.params.id-1]})
+   }  else {
+       res.render("error", { title: 'Siden finnes ikke!', message: 'Du har forsøkt å gå til en side som ikke finnes.'})
+   }
 });
 
 
@@ -91,8 +119,6 @@ return await fetch(url)
       return err
    });   
 }
-
-
 
 //Sørg for at rutene er tilgjengelig for app.js
 module.exports = router;
